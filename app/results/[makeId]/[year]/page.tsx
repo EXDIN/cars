@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import { lazy, Suspense, useEffect, useState } from "react";
 import { Car } from "./CarList";
+import React from "react";
 
 const CarList = lazy(() => import("./CarList"));
 

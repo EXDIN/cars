@@ -2,6 +2,7 @@
 
 import { ChangeEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import React from "react";
 
 const getCars = async (): Promise<TypeCars> => {
   const response = await fetch(
@@ -49,10 +50,11 @@ const generateStaticParams = (id: string, year: string) => {
   return `/results/${id}/${year}`;
 };
 
+const years = getYears();
+
 export default function Home() {
   const router = useRouter();
   const [cars, setCars] = useState<TypeCars>();
-  const [years, setYears] = useState(getYears());
   const [selectedData, setSelectedData] = useState<dataType>({} as dataType);
 
   useEffect(() => {
@@ -135,15 +137,15 @@ export default function Home() {
       </select>
       <button
         type="button"
-        onClick={(e) => handleSelectButton()}
+        onClick={handleSelectButton}
         disabled={!isButtonEnabled}
-        className={`text-white rounded-lg p-1 ${
+        className={`text-white rounded-lg p-2 ${
           isButtonEnabled
             ? "bg-blue-500 hover:bg-blue-700 cursor-pointer"
             : "bg-gray-500 cursor-not-allowed"
         }`}
       >
-        Пошук автомобів ...
+        Пошук автомобів
       </button>
     </div>
   );

@@ -1,4 +1,3 @@
-import { log } from "console";
 import React from "react";
 
 export type Car = {
@@ -16,12 +15,16 @@ const CarList = ({ cars }: { cars: Car[] }) => {
       </h2>
     );
   }
+
   return (
     <ul className="flex flex-col items-center gap-y-4 bg-gray-900 min-h-screen justify-center pt-4 pb-4">
       <h2 className="text-white">Знайдені Авто: </h2>
       {cars.map((car, index) => (
-        <li key={car.Make_ID+""+car.Model_ID+""+index} className="rounded-md bg-beige p-2 text-black">
-          {car.Make_Name + "  " + car.Model_Name}
+        <li
+          key={car.Make_ID + "" + car.Model_ID + "" + index}
+          className="rounded-md bg-beige p-2 text-black"
+        >
+          {car.Make_Name + " - " + car.Model_Name}
         </li>
       ))}
     </ul>

@@ -4,16 +4,20 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import React from "react";
 
-const getCars = async (): Promise<TypeCars> => {
-  const response = await fetch(
-    "https://vpic.nhtsa.dot.gov/api/vehicles/GetMakesForVehicleType/car?format=json"
-  );
+const getCars = async (): Promise<TypeCars | undefined> => {
+  try {
+    const response = await fetch(
+      "https://vpic.nhtsa.dot.gov/api/vehicles/GetMakesForVehicleType/car?format=json"
+    );
 
-  if (!response.ok) {
-    throw new Error("Network response was not ok");
+    if (!response.ok) {
+      throw new Error("Помилка завантаження");
+    }
+    const data = await response.json();
+    return data;
+  } catch (e) {
+    console.log(e);
   }
-  const data = await response.json();
-  return data;
 };
 
 type TypeCar = {
@@ -60,7 +64,9 @@ export default function Home() {
   useEffect(() => {
     const loadCars = async () => {
       const loadedCars = await getCars();
-      setCars(loadedCars);
+      if (loadedCars) {
+        setCars(loadedCars);
+      }
     };
 
     loadCars();

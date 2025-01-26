@@ -17,16 +17,20 @@ type FindedCars = {
 const getCarsByFilter = async (
   carId: string,
   year: string
-): Promise<FindedCars> => {
-  const response = await fetch(
-    `https://vpic.nhtsa.dot.gov/api/vehicles/GetModelsForMakeIdYear/makeId/${carId}/modelyear/${year}?format=json`
-  );
-  if (!response.ok) {
-    throw new Error("Помилка завантаження");
-  }
+): Promise<FindedCars | undefined> => {
+  try {
+    const response = await fetch(
+      `https://vpic.nhtsa.dot.gov/api/vehicles/GetModelsForMakeIdYear/makeId/${carId}/modelyear/${year}?format=json`
+    );
+    if (!response.ok) {
+      throw new Error("Помилка завантаження");
+    }
 
-  const data = await response.json();
-  return data;
+    const data = await response.json();
+    return data;
+  } catch (e) {
+    console.log(e);
+  }
 };
 
 export default function CarByFilted() {
@@ -38,14 +42,15 @@ export default function CarByFilted() {
 
   useEffect(() => {
     const loadCars = async () => {
+      setIsLoad(true);
       const cars = await getCarsByFilter(car, year);
-      if (cars.Count !== 0) {
+      if (cars && cars.Count !== 0) {
         setCarsByFilter(cars);
       }
+      setIsLoad(false);
     };
-    setIsLoad(true);
+
     loadCars();
-    setIsLoad(false);
   }, [car, year]);
 
   if (isLoad) {
